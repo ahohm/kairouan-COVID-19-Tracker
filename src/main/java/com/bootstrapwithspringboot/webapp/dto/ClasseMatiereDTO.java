@@ -5,14 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class MatiereDto {
-    private long id;
+@NoArgsConstructor
+public class ClasseMatiereDTO {
 
-    private String libel;
-
-    private float numberHours;
-
-    private long permit;
+    private long classeid;
+    private long matiereid;
 }

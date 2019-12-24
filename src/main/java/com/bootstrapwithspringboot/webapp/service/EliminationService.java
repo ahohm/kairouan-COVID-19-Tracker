@@ -38,13 +38,11 @@ public class EliminationService {
         eliminationDao.delete(etudiant);
     }
 
-
     public List<Matiere> findEliminatedEtudiant(Etudiant etudiant){
         List<Matiere> matieres = new ArrayList<>();
-
-         for(Elimination e : eliminationDao.findAllByEtudiant(etudiant)){
-             matieres.add(e.getMatiere());
-         }
-         return matieres;
+        for(Elimination e : eliminationDao.findAllByEtudiant(etudiant)){
+            matieres.add(e.getMatiere());
+        }
+        return matieres;
     }
 }

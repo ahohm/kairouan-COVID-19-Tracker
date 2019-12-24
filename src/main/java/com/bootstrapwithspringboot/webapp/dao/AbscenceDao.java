@@ -10,8 +10,6 @@ import java.util.List;
 
 @Repository
 public interface AbscenceDao extends JpaRepository<Abscence, Long> {
-
     List<Abscence> findAllByMatiereAndEtudiant(Matiere matiere, Etudiant etudiant);
-
 
 }

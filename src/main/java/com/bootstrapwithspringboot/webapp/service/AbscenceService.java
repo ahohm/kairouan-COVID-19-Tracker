@@ -17,6 +17,7 @@ public class AbscenceService {
 
     private AbscenceDao abscenceDao;
 
+
     public Abscence save(Abscence abscence){
         return abscenceDao.save(abscence);
     }
@@ -29,7 +30,7 @@ public class AbscenceService {
         return abscenceDao.findById(id);
     }
 
-    public Abscence update(long id, Abscence abscence){
+    public Abscence update(Abscence abscence){
         return  abscenceDao.save(abscence);
     }
 
@@ -41,5 +42,7 @@ public class AbscenceService {
     public List<Abscence> findAllByMatiereAndEtudiant(Matiere matiere, Etudiant etudiant){
         return abscenceDao.findAllByMatiereAndEtudiant(matiere, etudiant);
     }
+
+
 
 }

@@ -1,6 +1,5 @@
 package com.bootstrapwithspringboot.webapp.api;
 
-import com.bootstrapwithspringboot.webapp.dao.ClasseDao;
 import com.bootstrapwithspringboot.webapp.dto.ClasseDto;
 import com.bootstrapwithspringboot.webapp.dto.EtudiantDto;
 import com.bootstrapwithspringboot.webapp.dto.MatiereDto;
@@ -21,11 +20,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.Optional;
 
 @Controller
 public class WebController {
@@ -141,7 +138,7 @@ public class WebController {
     public String addOneEtudiant(Model model, EtudiantDto etudiantDto){
 
 //        etudiantService.save(new Etudiant("00027","zoubair" , "baya","ah@ah.com", LocalDate.now(),"+21622222222"),1);
-        etudiantService.save(new Etudiant(etudiantDto.getMatricule(),etudiantDto.getNom() , etudiantDto.getPrenom(),etudiantDto.getEmail(), LocalDate.parse(etudiantDto.getDateDeNaissance()),etudiantDto.getPhoneNumber()),1);
+        etudiantService.save(new Etudiant(etudiantDto.getMatricule(),etudiantDto.getNom() , etudiantDto.getPrenom(),etudiantDto.getEmail(), LocalDate.parse(etudiantDto.getDateDeNaissance()),etudiantDto.getPhoneNumber()));
         model.addAttribute("etudiants", etudiantService.findAll());
         return "etudiant";
     }
@@ -150,7 +147,7 @@ public class WebController {
     public String addOneClasse(Model model, ClasseDto classeDto){
 
 //        etudiantService.save(new Etudiant("00027","zoubair" , "baya","ah@ah.com", LocalDate.now(),"+21622222222"),1);
-        classeService.save(new Classe(classeDto.getLibel(),classeDto.getNomComplet()));
+        classeService.save(new Classe(classeDto.getId(),classeDto.getLibel(),classeDto.getNomComplet()));
         model.addAttribute("classes", classeService.findAll());
         return "classe";
     }
@@ -158,7 +155,7 @@ public class WebController {
     @PostMapping("/addmatiere")
     public String addOneMatiere(Model model, MatiereDto matiereDto){
 
-        matiereService.save(new Matiere(matiereDto.getLibel(),matiereDto.getNumberHours(),matiereDto.getPermit()));
+        matiereService.save(new Matiere(matiereDto.getId(),matiereDto.getLibel(),matiereDto.getNumberHours(),matiereDto.getPermit()));
         model.addAttribute("matieres", matiereService.findAll());
         return "matiere";
     }
@@ -168,7 +165,7 @@ public class WebController {
     @RequestMapping("classe/{id}/matiere")
     public String getMatiereByClasse(@PathVariable long id, Model model){
 
-        model.addAttribute("matieres", matiereService.findByClasse(classeService.getOne(id)));
+        model.addAttribute("matieres", matiereService.findByClasse(id));
         model.addAttribute("classes", classeService.findAll());
         return "classeMatiere";
     }
@@ -179,7 +176,7 @@ public class WebController {
 
     /* delete */
     @GetMapping("matiere/{matiereid}/delete")
-    public String deleteMatiere(@PathVariable long matiereid,Model model){
+    public String deleteMatiere(@PathVariable long matiereid, Model model){
         System.out.println(matiereid);
         logger.warn(matiereid+"");
         matiereService.delete(matiereService.getById(matiereid));
@@ -188,7 +185,7 @@ public class WebController {
     }
 
     @GetMapping("etudiant/{matricule}/delete")
-    public String deleteEtudiant(@PathVariable String matricule,Model model){
+    public String deleteEtudiant(@PathVariable String matricule, Model model){
 
         etudiantService.delete(matricule);
         model.addAttribute("etudiants", etudiantService.findAll());
@@ -196,7 +193,7 @@ public class WebController {
     }
 
     @GetMapping("classe/{classeid}/delete")
-    public String deleteClasse(@PathVariable long classeid,Model model){
+    public String deleteClasse(@PathVariable long classeid, Model model){
 
         classeService.delete(classeid);
         model.addAttribute("classes", classeService.findAll());

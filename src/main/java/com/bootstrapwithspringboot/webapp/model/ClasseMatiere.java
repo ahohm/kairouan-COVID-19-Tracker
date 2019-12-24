@@ -4,35 +4,33 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@NoArgsConstructor
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Matiere {
+public class ClasseMatiere {
 
+
+    @EmbeddedId
+    private ClasseMatiereIdentity classeMatiereIdentity;
+
+   /*
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Size(min=3, max=30)
-    private String libel;
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Classe classe;
 
-    @Positive
-    private float numberHours;
-
-    @Positive
-    private long permit;
-
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Matiere matiere;
+   */
 
 }

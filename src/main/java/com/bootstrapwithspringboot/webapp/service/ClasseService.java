@@ -30,12 +30,14 @@ public class ClasseService {
     }
 
     public Classe update(long id, Classe classe){
+        classe.setId(id);
         return classeDao.save(classe);
     }
 
     public void delete(long id){
-        Classe etudiant = getOneById(id).get();
-        classeDao.delete(etudiant);
+        Classe classe = getOneById(id).get();
+        classeDao.delete(classe);
     }
+
 
 }

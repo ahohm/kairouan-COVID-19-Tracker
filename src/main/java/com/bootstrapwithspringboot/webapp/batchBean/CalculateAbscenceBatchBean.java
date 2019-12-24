@@ -1,7 +1,6 @@
 package com.bootstrapwithspringboot.webapp.batchBean;
 
 import com.bootstrapwithspringboot.webapp.model.Etudiant;
-import com.bootstrapwithspringboot.webapp.model.Matiere;
 import com.bootstrapwithspringboot.webapp.service.AbscenceService;
 import com.bootstrapwithspringboot.webapp.service.EliminationService;
 import com.bootstrapwithspringboot.webapp.service.EtudiantService;
@@ -100,7 +99,7 @@ public class CalculateAbscenceBatchBean {
         for ( Etudiant etudiant: etudiants) {
 //            logger.error(etudiant.getNom()+" "+etudiant.getPrenom());
 
-            List<Matiere> matieres = matiereService.findByClasse(etudiant.getClasse());
+            //List<Matiere> matieres = matiereService.findByClasse(etudiant.getClasse());
 //            logger.warn("matiers ::"+matieres.size()+"");
 
 /*** start 1st logic work well*/
@@ -121,10 +120,10 @@ public class CalculateAbscenceBatchBean {
 //                            "you passed the permit number of abscence("+matiere.getPermit()+"), " +
 //                            "you've done "+abscences.size()*1.5+" hours of abscence. \n we are sorry for you");
 //
-////                mailSender.send(mailMessage);
+//
 //                    if(isInternetAvailable()){
 //                        javaMailSender.send(mailMessage);
-////                    logger.info("ok");
+//                      logger.info("ok");
 //                    }
 //                }
 //            }

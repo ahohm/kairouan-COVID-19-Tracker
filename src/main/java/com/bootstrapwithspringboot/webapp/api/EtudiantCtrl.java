@@ -31,7 +31,8 @@ public class EtudiantCtrl {
             try{
 
                 etudiant.setDateDeNaissance(dob);
-                return new ResponseEntity(etudiantService.save(etudiant, classeid), HttpStatus.OK);
+                etudiant.setClasse(classeDao.getOne(classeid));
+                return new ResponseEntity(etudiantService.save(etudiant), HttpStatus.OK);
             }
             catch( Exception e){
                 return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -64,7 +65,8 @@ public class EtudiantCtrl {
                                            @PathParam("classeid") long classeid){
         try{
             etudiant.setDateDeNaissance(dob);
-            return new ResponseEntity(etudiantService.update(classeid, etudiant), HttpStatus.OK);
+            etudiant.setClasse(classeDao.getOne(classeid));
+            return new ResponseEntity(etudiantService.update(etudiant), HttpStatus.OK);
         }
         catch (Exception e){
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);

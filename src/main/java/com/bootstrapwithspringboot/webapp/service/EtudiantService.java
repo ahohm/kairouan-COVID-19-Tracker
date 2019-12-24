@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -17,11 +16,7 @@ public class EtudiantService {
     private EtudiantDao etudiantDao;
     private ClasseDao classeDao;
 
-
-    public Etudiant save(Etudiant etudiant, long classeid){
-
-        Classe classe =  classeDao.getOne(classeid);
-        etudiant.setClasse(classe);
+    public Etudiant save(Etudiant etudiant){
         return etudiantDao.save(etudiant);
     }
 
@@ -29,17 +24,16 @@ public class EtudiantService {
         return etudiantDao.findAll();
     }
 
-    public Optional<Etudiant> getOneById(String matricule){
+    public Etudiant getOneById(String matricule){
         return etudiantDao.findByMatricule(matricule);
     }
 
-    public Etudiant update(long classeid, Etudiant etudiant){
-
-        return this.save(etudiant, classeid);
+    public Etudiant update(Etudiant etudiant){
+        return this.save(etudiant);
     }
 
     public boolean delete(String matricule){
-        Etudiant etudiant = getOneById(matricule).get();
+        Etudiant etudiant = getOneById(matricule);
         try {
             etudiantDao.delete(etudiant);
             return true;

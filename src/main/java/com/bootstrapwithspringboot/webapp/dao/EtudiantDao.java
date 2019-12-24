@@ -7,14 +7,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface EtudiantDao extends JpaRepository<Etudiant, String> {
-    Optional<Etudiant> findByMatricule(String matricule);
-    List<Etudiant> findAllByClasse(Classe classe);
+    Etudiant findByMatricule(String matricule);
+
     @Query(value = "select max(matricule) from Etudiant ")
     String getMaxMatricule();
+
+    List<Etudiant> findAllByClasse(Classe classe);
 
 
 }

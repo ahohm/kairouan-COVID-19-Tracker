@@ -1,11 +1,13 @@
 package com.bootstrapwithspringboot.webapp.service;
 
+import com.bootstrapwithspringboot.webapp.dao.ClasseMatiereDao;
 import com.bootstrapwithspringboot.webapp.dao.MatiereDao;
-import com.bootstrapwithspringboot.webapp.model.Classe;
+import com.bootstrapwithspringboot.webapp.model.ClasseMatiere;
 import com.bootstrapwithspringboot.webapp.model.Matiere;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +16,7 @@ import java.util.Optional;
 public class MatiereService {
 
     private MatiereDao matiereDao;
+    private ClasseMatiereDao classeMatiereDao;
 
     public Matiere save(Matiere matiere){
         return matiereDao.save(matiere);
@@ -31,7 +34,7 @@ public class MatiereService {
         return matiereDao.getOne(id);
     }
 
-    public Matiere update(long id, Matiere matiere){
+    public Matiere update(Matiere matiere){
         return matiereDao.save(matiere);
     }
 
@@ -43,7 +46,16 @@ public class MatiereService {
         matiereDao.delete(matiere);
     }
 
-    public List<Matiere> findByClasse(Classe classe){
-        return matiereDao.findAllByClasses(classe);
+    public List<Matiere> findByClasse(long classe){
+
+        List matieres = new ArrayList();
+
+        List<ClasseMatiere> classeMatiere = classeMatiereDao.findByClasse(classe);
+        for (ClasseMatiere e: classeMatiere) {
+            matieres.add(e.getClasseMatiereIdentity().getMatiere());
+        }
+        return matieres;
     }
+
+
 }

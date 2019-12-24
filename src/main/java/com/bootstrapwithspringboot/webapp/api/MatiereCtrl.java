@@ -1,6 +1,7 @@
 package com.bootstrapwithspringboot.webapp.api;
 
 import com.bootstrapwithspringboot.webapp.model.Matiere;
+import com.bootstrapwithspringboot.webapp.service.ClasseService;
 import com.bootstrapwithspringboot.webapp.service.MatiereService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.util.List;
 public class MatiereCtrl {
 
     private MatiereService matiereService;
+    private ClasseService classeService;
 
     @PostMapping("/add")
     public ResponseEntity<Matiere> add(@Valid @RequestBody Matiere matiere){
@@ -50,12 +52,15 @@ public class MatiereCtrl {
     @PutMapping("/{id}")
     public ResponseEntity<Matiere> update(@PathVariable long id, @RequestBody Matiere matiere){
         try{
-            return new ResponseEntity(matiereService.update(id, matiere), HttpStatus.OK);
+            matiere.setId(id);
+            return new ResponseEntity(matiereService.update(matiere), HttpStatus.OK);
         }
         catch (Exception e){
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> delete(@PathVariable long id){
@@ -68,6 +73,25 @@ public class MatiereCtrl {
         }
     }
 
+//    @GetMapping("/byclasse/{id}")
+//    public ResponseEntity<List<Matiere>> getAllByMatiere(@PathVariable long id){
+//        try {
+//            Classe classe = classeService.getOne(id);
+//            return new ResponseEntity(matiereService.findByClasse(classe),HttpStatus.OK);
+//        }
+//        catch (Exception e){
+//            return new ResponseEntity(HttpStatus.NO_CONTENT);
+//        }
+//    }
 
+    @GetMapping("/byclasse/{id}")
+    public List<Matiere> getAllByMatiere(@PathVariable long id){
+//            Classe classe = classeService.getOneById(id).get();
+            return matiereService.findByClasse(id);
 
+    }
 }
+
+
+
+

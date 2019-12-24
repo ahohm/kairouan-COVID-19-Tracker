@@ -1,25 +1,30 @@
 package com.bootstrapwithspringboot.webapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 //@NoArgsConstructor
 //@AllArgsConstructor
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Etudiant {
 
     @Id
     @NotNull(message = "Matricule is mandatory must have exactly 5 caracter")
     @Size(min = 5, max = 5)
     private String matricule;
+
 
     @NotBlank(message = "Name is mandatory")
     @Size(min=3, max=30)
@@ -33,27 +38,19 @@ public class Etudiant {
     @Email(message = "Email should be valid")
     private String email;
 
-//    @Past(message = "date od birth must be a past date")
+    //    @Past(message = "date od birth must be a past date")
     private LocalDate dateDeNaissance;
-
-
-    @JsonIgnore
-    //@OneToMany(mappedBy = "etudiant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @OneToMany(mappedBy = "etudiant", fetch = FetchType.LAZY)
-    private List<Abscence> abscences;
-
-    @JsonIgnore
-    //@ManyToOne(cascade = CascadeType.REMOVE)
-    @ManyToOne()
-    private Classe classe;
-
-    @JsonIgnore
-    //@OneToMany(mappedBy ="etudiant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @OneToMany(mappedBy ="etudiant", fetch = FetchType.LAZY)
-    private List<Elimination> eliminations;
 
     @Pattern(regexp = "(\\+216|00)[0-9]{8}")
     private String phoneNumber;
+
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Classe classe;
+
+
+    public Etudiant() {
+    }
 
     public Etudiant(@NotNull(message = "Matricule is mandatory must have exactly 5 caracter")
                     @Size(min = 5, max = 5) String matricule,
@@ -71,21 +68,5 @@ public class Etudiant {
         this.email = email;
         this.dateDeNaissance = dateDeNaissance;
         this.phoneNumber = phoneNumber;
-    }
-
-    public Etudiant() {
-    }
-
-
-
-    @Override
-    public String toString() {
-        return "Etudiant{" +
-                "matricule='" + matricule + '\'' +
-                ", nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
-                ", email='" + email + '\'' +
-                ", dateDeNaissance=" + dateDeNaissance +
-                '}';
     }
 }
