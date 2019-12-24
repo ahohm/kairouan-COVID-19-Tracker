@@ -4,12 +4,14 @@ import com.bootstrapwithspringboot.webapp.dao.ClasseMatiereDao;
 import com.bootstrapwithspringboot.webapp.model.Classe;
 import com.bootstrapwithspringboot.webapp.model.ClasseMatiere;
 import com.bootstrapwithspringboot.webapp.model.ClasseMatiereIdentity;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
 @Service
+@AllArgsConstructor
 public class ClassematiereService {
 
     private ClasseMatiereDao classeMatiereDao;
@@ -40,9 +42,8 @@ public class ClassematiereService {
         }
     }
 
-    public List<ClasseMatiere> findAllByClasse(Classe classe){
+    public List<ClasseMatiere> findAllByClasse(long classeid){
 //        return classeMatiereDao.findAllByClasseMatiereIdentityClasseIsLike(classe);
-//        return classeMatiereDao.findAllByClasse_IdMatiereIdentityClasse((long) 1);
-        return null;
+        return classeMatiereDao.findByClasse(classeid);
     }
 }

@@ -1,5 +1,6 @@
 package com.bootstrapwithspringboot.webapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,24 +8,15 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-public class Elimination {
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class Elimination{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
-
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Etudiant etudiant;
-
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Matiere matiere;
-
+    @EmbeddedId
+    private EliminationIdentity eliminationIdentity;
 }

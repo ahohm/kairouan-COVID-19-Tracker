@@ -1,14 +1,13 @@
 package com.bootstrapwithspringboot.webapp.api;
 
 
-import com.bootstrapwithspringboot.webapp.dao.ClasseMatiereDao;
-import com.bootstrapwithspringboot.webapp.dto.ClasseMatiereDTO;
-import com.bootstrapwithspringboot.webapp.model.Classe;
-import com.bootstrapwithspringboot.webapp.model.ClasseMatiere;
-import com.bootstrapwithspringboot.webapp.model.ClasseMatiereIdentity;
+import com.bootstrapwithspringboot.webapp.dto.EliminationDTO;
+import com.bootstrapwithspringboot.webapp.model.Elimination;
+import com.bootstrapwithspringboot.webapp.model.EliminationIdentity;
+import com.bootstrapwithspringboot.webapp.model.Etudiant;
 import com.bootstrapwithspringboot.webapp.model.Matiere;
-import com.bootstrapwithspringboot.webapp.service.ClasseService;
-import com.bootstrapwithspringboot.webapp.service.ClassematiereService;
+import com.bootstrapwithspringboot.webapp.service.EliminationService;
+import com.bootstrapwithspringboot.webapp.service.EtudiantService;
 import com.bootstrapwithspringboot.webapp.service.MatiereService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,24 +18,24 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/classematiere")
+@RequestMapping("/elimination")
 @AllArgsConstructor
-public class ClasseMatiereCtrl {
+public class EliminationCtrl {
 
-    private ClassematiereService classeMatiereService;
+    private EliminationService eliminationService;
 
+    private EtudiantService etudiantService;
     private MatiereService matiereService;
-    private ClasseService classeService;
 
     @PostMapping("/add")
-    public ResponseEntity<ClasseMatiere> add(@Valid @RequestBody ClasseMatiereDTO classeMatiereDTO){
+    public ResponseEntity<Elimination> add(@Valid @RequestBody EliminationDTO eliminationDTO){
         try{
-            Classe classe = classeService.getOneById(classeMatiereDTO.getClasseid()).get();
-            Matiere matiere = matiereService.getById(classeMatiereDTO.getMatiereid());
+            Etudiant etudiant = etudiantService.getOneById(eliminationDTO.getEtudiantid());
+            Matiere matiere = matiereService.getById(eliminationDTO.getMatiereid());
 //            ClasseMatiere classeMatiere = new ClasseMatiere(classeMatiereDTO.getId(),classe,matiere);
-            ClasseMatiere classeMatiere = new ClasseMatiere(new ClasseMatiereIdentity(classe,matiere));
+            Elimination elimination = new Elimination(new EliminationIdentity(etudiant,matiere));
 
-            return new ResponseEntity(classeMatiereService.save(classeMatiere), HttpStatus.OK);
+            return new ResponseEntity(eliminationService.save(elimination), HttpStatus.OK);
         }
         catch( Exception e){
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -44,9 +43,9 @@ public class ClasseMatiereCtrl {
     }
 
     @GetMapping({"/",""})
-    public ResponseEntity<List<ClasseMatiere>> getAll(){
+    public ResponseEntity<List<Elimination>> getAll(){
         try {
-            return new ResponseEntity(classeMatiereService.findAll(), HttpStatus.OK);
+            return new ResponseEntity(eliminationService.findAll(), HttpStatus.OK);
         }
         catch (Exception e){
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -59,13 +58,13 @@ public class ClasseMatiereCtrl {
 //    }
 
     @GetMapping("/getOne")
-    public ResponseEntity<ClasseMatiere> getOne(@RequestBody ClasseMatiereDTO classeMatiereDTO){
+    public ResponseEntity<Elimination> getOne(@RequestBody EliminationDTO eliminationDTO){
         try{
-            Classe classe = classeService.getOneById(classeMatiereDTO.getClasseid()).get();
-            Matiere matiere = matiereService.getById(classeMatiereDTO.getMatiereid());
-            ClasseMatiereIdentity id = new ClasseMatiereIdentity(classe,matiere);
+            Etudiant etudiant = etudiantService.getOneById(eliminationDTO.getEtudiantid());
+            Matiere matiere = matiereService.getById(eliminationDTO.getMatiereid());
+            EliminationIdentity id = new EliminationIdentity(etudiant,matiere);
 //            return new ResponseEntity(classeMatiereService.getOne(id) , HttpStatus.OK);
-            return new ResponseEntity(classeMatiereService.getOneById(id) , HttpStatus.OK);
+            return new ResponseEntity(eliminationService.getOneById(id) , HttpStatus.OK);
         }
         catch (Exception e){
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -92,13 +91,13 @@ public class ClasseMatiereCtrl {
 
 
     @DeleteMapping({"/",""})
-    public ResponseEntity<Void> delete(@RequestBody ClasseMatiereDTO classeMatiereDTO){
+    public ResponseEntity<Void> delete(@RequestBody EliminationDTO eliminationDTO){
         try{
 
-            Classe classe = classeService.getOneById(classeMatiereDTO.getClasseid()).get();
-            Matiere matiere = matiereService.getById(classeMatiereDTO.getMatiereid());
-            ClasseMatiereIdentity id = new ClasseMatiereIdentity(classe,matiere);
-            classeMatiereService.delete(id);
+            Etudiant etudiant = etudiantService.getOneById(eliminationDTO.getEtudiantid());
+            Matiere matiere = matiereService.getById(eliminationDTO.getMatiereid());
+            EliminationIdentity id = new EliminationIdentity(etudiant,matiere);
+            eliminationService.delete(id);
             return new ResponseEntity(HttpStatus.OK);
         }
         catch(Exception e){
@@ -106,8 +105,14 @@ public class ClasseMatiereCtrl {
         }
     }
 
-    @GetMapping("/byclasse/{id}")
-    public List<ClasseMatiere> test(@PathVariable long  id){
-        return classeMatiereService.findAllByClasse(id);
+    @GetMapping("/byetudiant/{id}")
+    public ResponseEntity<List<Elimination>> getAllByEtudiant(@PathVariable String  id){
+
+        try {
+            return new ResponseEntity<>(eliminationService.findAllByEtudiant(id),HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
     }
 }
