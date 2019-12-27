@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "ABSCENCE")
 public class Abscence {
 
     @Id
@@ -21,10 +22,12 @@ public class Abscence {
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "ETUDIANT_MATRICULE")
     private Etudiant etudiant;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "MATIERE_ID")
     private Matiere matiere;
 
     private LocalDate date;

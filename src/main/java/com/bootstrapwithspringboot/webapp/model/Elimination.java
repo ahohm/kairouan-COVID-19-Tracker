@@ -15,6 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Table(name = "ELIMINATION")
 public class Elimination{
 
     @EmbeddedId

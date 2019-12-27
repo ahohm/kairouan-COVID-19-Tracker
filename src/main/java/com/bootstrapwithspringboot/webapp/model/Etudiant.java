@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 
@@ -18,34 +16,42 @@ import java.time.LocalDate;
 //@AllArgsConstructor
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Table(name = "ETUDIANT")
 public class Etudiant {
 
     @Id
     @NotNull(message = "Matricule is mandatory must have exactly 5 caracter")
     @Size(min = 5, max = 5)
+    @Column(name = "MATRICULE")
     private String matricule;
 
 
     @NotBlank(message = "Name is mandatory")
     @Size(min=3, max=30)
+    @Column(name = "NOM")
     private String nom;
 
     @NotBlank(message = "last name is mandatory")
     @Size(min=3, max=30)
+    @Column(name = "PRENOM")
     private String prenom;
 
     @NotBlank(message = "last name is mandatory")
     @Email(message = "Email should be valid")
+    @Column(name = "EMAIL")
     private String email;
 
     //    @Past(message = "date od birth must be a past date")
+    @Column(name = "DATE_DE_NAISSANCE")
     private LocalDate dateDeNaissance;
 
     @Pattern(regexp = "(\\+216|00)[0-9]{8}")
+    @Column(name = "PHONE_NUMBER")
     private String phoneNumber;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "CLASSE_ID")
     private Classe classe;
 
 
