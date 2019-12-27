@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 public class Service {
 
     private final  SmsSender smsSender;
-
     public void sendSms(@Qualifier("twilio") SmsRequest smsRequest){
             smsSender.sendSms(smsRequest);
     }

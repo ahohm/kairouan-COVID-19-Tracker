@@ -1,29 +1,32 @@
 package com.bootstrapwithspringboot.webapp.batchBean;
 
-import com.bootstrapwithspringboot.webapp.model.Etudiant;
+import com.bootstrapwithspringboot.webapp.model.*;
 import com.bootstrapwithspringboot.webapp.service.AbscenceService;
+import com.bootstrapwithspringboot.webapp.service.EliminationService;
 import com.bootstrapwithspringboot.webapp.service.EtudiantService;
 import com.bootstrapwithspringboot.webapp.service.MatiereService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-@Component
+@Service
+@ConditionalOnProperty(name = "spring.enable.scheduling")
 public class CalculateAbscenceBatchBean {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-
-
 
     @Autowired
     private MatiereService matiereService;
@@ -35,14 +38,16 @@ public class CalculateAbscenceBatchBean {
     private AbscenceService abscenceService;
 
     @Autowired
+    private EliminationService eliminationService;
+
+    @Autowired
     private MailConfig mailConfig;
 
     @Autowired
     private JavaMailSenderImpl javaMailSender;
 
-//    @Autowired
-//    private EliminationService eliminationService;
-
+    @Autowired
+    private com.bootstrapwithspringboot.webapp.batchBean.Service service;
 
     /*  check if internet available*/
     public static boolean isInternetAvailable() throws IOException {
@@ -65,13 +70,11 @@ public class CalculateAbscenceBatchBean {
         }
     }
 
-
     /*@Scheduled(cron = "0 17 * * FRI")*/
-    @Scheduled(cron = "0/10 * * * * *")
+    @Scheduled(cron = "0/30 * * * * *")
     public void calculateAbscence() throws IOException {
-        List<Etudiant> etudiants = etudiantService.findAll();
 
-//        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        /*JavaMailSenderImpl mailSender = new JavaMailSenderImpl();*/
         javaMailSender.setHost(this.mailConfig.getHost());
         javaMailSender.setPort(this.mailConfig.getPort());
         javaMailSender.setUsername(this.mailConfig.getUsername());
@@ -92,85 +95,47 @@ public class CalculateAbscenceBatchBean {
 
         javaMailSender.setJavaMailProperties(javaMailProperties);
 
+        List<Etudiant> etudiants = etudiantService.findAll();
 
+        for (Etudiant etudiant : etudiants){
+            List<Matiere> matieres = matiereService.findByClasse(etudiant.getClasse().getId());
+            List<Elimination> eliminations = eliminationService.findAllByEtudiant(etudiant.getMatricule());
+            List<Matiere> eliminatedMatiere = new ArrayList<>();
+            for (Elimination elimination : eliminations){
+                eliminatedMatiere.add(elimination.getEliminationIdentity().getMatiere());
+            }
+            for (Matiere matiere : matieres){
+                if (!(eliminatedMatiere.contains(matiere))){
+                    logger.info("calcule : "+etudiant.getPrenom()+matiere.getLibel());
 
+                    List<Abscence> abscences = abscenceService.findAllByMatiereAndEtudiant(matiere, etudiant);
+                    if (abscences.size()*1.5> matiere.getPermit()){
+                        logger.debug("eliminated ::: NAME :: /*"+etudiant.getPrenom()+"*/ MATIERE ::"+matiere.getLibel()+", abscence ::"+abscences.size()*1.5);
 
-        for ( Etudiant etudiant: etudiants) {
-//            logger.error(etudiant.getNom()+" "+etudiant.getPrenom());
+                        eliminationService.save(new Elimination(new EliminationIdentity(etudiant,matiere)));
+                        SimpleMailMessage mailMessage = new SimpleMailMessage();
+                        mailMessage.setFrom("noReply@no.replay");
+                        mailMessage.setSubject("Elimination");
+                        mailMessage.setCc(etudiant.getEmail());
+                        String text = "mr."+etudiant.getNom()+" "+etudiant.getPrenom()+". \n " +
+                                "you have been eliminated from the exam of "+matiere.getLibel()+", \n because " +
+                                "you passed the permit number of abscence("+matiere.getPermit()+"), " +
+                                "you've done "+abscences.size()*1.5+" hours of abscence. \n we are sorry for you";
 
-//            List<Matiere> matieres = matiereService.findByClasse(etudiant.getClasse().getId());
-//            logger.warn("matiers ::"+matieres.size()+"");
+                        mailMessage.setText(text);
+                        SmsRequest smsRequest =new SmsRequest(etudiant.getPhoneNumber(),text);
 
-/*** start 1st logic work well*/
-//            for (Matiere matiere:matieres) {
-//
-////                logger.info("matier :: " + matiere.getLibel());
-//                List<Abscence> abscences = abscenceService.findAllByMatiereAndEtudiant(matiere, etudiant);
-//                if (abscences.size()*1.5> matiere.getPermit()){
-//                    logger.debug("eliminated ::: NAME :: /*"+etudiant.getPrenom()+"*/ MATIERE ::"+matiere.getLibel()+", abscence ::"+abscences.size()*1.5);
-//
-//                    SimpleMailMessage mailMessage = new SimpleMailMessage();
-//                    mailMessage.setFrom("noReply@no.replay");
-//                    mailMessage.setSubject("Elimination");
-//
-//                    mailMessage.setCc(etudiant.getEmail());
-//                    mailMessage.setText("mr."+etudiant.getNom()+" "+etudiant.getPrenom()+". \n " +
-//                            "you have been eliminated from the exam of "+matiere.getLibel()+", \n because " +
-//                            "you passed the permit number of abscence("+matiere.getPermit()+"), " +
-//                            "you've done "+abscences.size()*1.5+" hours of abscence. \n we are sorry for you");
-//
-//
-//                    if(isInternetAvailable()){
-//                        javaMailSender.send(mailMessage);
-//                      logger.info("ok");
-//                    }
-//                }
-//            }
-/*** End 1st logic work well*/
+                        if(isInternetAvailable()){
+                            javaMailSender.send(mailMessage);
+                            service.sendSms(smsRequest);
+                        }
+                    }
+                }
 
-
-//            for (Matiere matiere: matieres) {
-//                if (eliminationService.findEliminatedEtudiant(etudiant).indexOf(matiere)==-1){
-//                    List<Matiere> e = eliminationService.findEliminatedEtudiant(etudiant);
-//                    logger.error(etudiant.getPrenom()+"is eliminated"+matiere.getLibel()+" hey"+ e.size());
-//                    for (int i=0 ; i<e.size();i++ ){
-//                        System.out.println(e.get(i).getLibel());
-//                    }
-//
-//                }else{
-//                    logger.info(matiere.getLibel()+" checking ");
-//                    List<Abscence> abscences = abscenceService.findAllByMatiereAndEtudiant(matiere, etudiant);
-//                    if (abscences.size()*1.5> matiere.getPermit()){
-//                        logger.debug("eliminated ::: NAME :: /*"+etudiant.getPrenom()+"*/ MATIERE ::"+matiere.getLibel()+", abscence ::"+abscences.size()*1.5);
-//
-//
-////                        eliminationService.save(new Elimination(etudiant,matiere));
-//
-//
-//                    SimpleMailMessage mailMessage = new SimpleMailMessage();
-//                    mailMessage.setFrom("noReply@no.replay");
-//                    mailMessage.setSubject("Elimination");
-//
-//                    mailMessage.setCc(etudiant.getEmail());
-//                    mailMessage.setText("mr."+etudiant.getNom()+" "+etudiant.getPrenom()+". \n " +
-//                            "you have been eliminated from the exam of "+matiere.getLibel()+", \n because " +
-//                            "you passed the permit number of abscence("+matiere.getPermit()+"), " +
-//                            "you've done "+abscences.size()*1.5+" hours of abscence. \n we are sorry for you");
-//
-////                mailSender.send(mailMessage);
-//                    if(isInternetAvailable()){
-//                        javaMailSender.send(mailMessage);
-////                    logger.info("ok");
-//                    }
-//                }
-//
-//                }
-//
-//            }
+            }
 
 
 
         }
     }
-
 }

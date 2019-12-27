@@ -1,7 +1,6 @@
 package com.bootstrapwithspringboot.webapp.api;
 
 
-import com.bootstrapwithspringboot.webapp.dao.ClasseMatiereDao;
 import com.bootstrapwithspringboot.webapp.dto.ClasseMatiereDTO;
 import com.bootstrapwithspringboot.webapp.model.Classe;
 import com.bootstrapwithspringboot.webapp.model.ClasseMatiere;
@@ -33,7 +32,6 @@ public class ClasseMatiereCtrl {
         try{
             Classe classe = classeService.getOneById(classeMatiereDTO.getClasseid()).get();
             Matiere matiere = matiereService.getById(classeMatiereDTO.getMatiereid());
-//            ClasseMatiere classeMatiere = new ClasseMatiere(classeMatiereDTO.getId(),classe,matiere);
             ClasseMatiere classeMatiere = new ClasseMatiere(new ClasseMatiereIdentity(classe,matiere));
 
             return new ResponseEntity(classeMatiereService.save(classeMatiere), HttpStatus.OK);
@@ -53,43 +51,18 @@ public class ClasseMatiereCtrl {
         }
     }
 
-//    @GetMapping({"/",""})
-//    public List<ClasseMatiere> getAll(){
-//            return classeMatiereService.findAll();
-//    }
-
     @GetMapping("/getOne")
     public ResponseEntity<ClasseMatiere> getOne(@RequestBody ClasseMatiereDTO classeMatiereDTO){
         try{
             Classe classe = classeService.getOneById(classeMatiereDTO.getClasseid()).get();
             Matiere matiere = matiereService.getById(classeMatiereDTO.getMatiereid());
             ClasseMatiereIdentity id = new ClasseMatiereIdentity(classe,matiere);
-//            return new ResponseEntity(classeMatiereService.getOne(id) , HttpStatus.OK);
             return new ResponseEntity(classeMatiereService.getOneById(id) , HttpStatus.OK);
         }
         catch (Exception e){
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    /*  No need for update in this case*/
-    /*@PutMapping("/update")
-    public ResponseEntity<ClasseMatiere> update( @RequestBody ClasseMatiereDTO classeMatiereDTO){
-        try{
-            Classe classe = classeService.getOneById(classeMatiereDTO.getClasseid()).get();
-            Matiere matiere = matiereService.getById(classeMatiereDTO.getMatiereid());
-//            ClasseMatiere classeMatiere = new ClasseMatiere(id,classe,matiere);
-            ClasseMatiere classeMatiere = new ClasseMatiere(new ClasseMatiereIdentity(classe,matiere));
-
-            return new ResponseEntity(classeMatiereService.save(classeMatiere), HttpStatus.OK);
-        }
-        catch (Exception e){
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }*/
-
-
-
 
     @DeleteMapping({"/",""})
     public ResponseEntity<Void> delete(@RequestBody ClasseMatiereDTO classeMatiereDTO){

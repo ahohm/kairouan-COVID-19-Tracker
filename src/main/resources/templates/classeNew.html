@@ -56,9 +56,12 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="list-group" id="list-tab" role="tablist">
-                    <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="etudian" th:href="@{/etudiants}">Etudian</a>
-                    <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="classe" th:href="@{/classes}">Classe</a>
-                    <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="matiere" th:href="@{/matieres}">Matiere</a>
+                    <a class="list-group-item list-group-item-action"  th:href="@{/etudiants}">Etudian</a>
+                    <a class="list-group-item list-group-item-action active" th:href="@{/classes}">Classe</a>
+                    <a class="list-group-item list-group-item-action" th:href="@{/matieres}">Matiere</a>
+                    <a class="list-group-item list-group-item-action" th:href="@{/abscences}">Abscence</a>
+                    <a class="list-group-item list-group-item-action" th:href="@{/sms}">Envoyer SMS</a>
+                    <a class="list-group-item list-group-item-action" th:href="@{/email}">Envoyer mail</a>
                 </div>
             </div>
             <div class="col-md-9 container-fluid">
@@ -70,8 +73,8 @@
                             <tr>
                                 <label for="validationServer01">libel</label>
                                 <input th:field="*{libel}" type="text" class="form-control is-valid" id="validationServer01" placeholder="First name"  required>
-
                             </tr>
+
                             <tr>
                                 <label for="validationServer02">nom complet</label>
                                 <input th:field="*{nomComplet}" type="text" class="form-control is-valid" id="validationServer02" placeholder="Last name"  required>

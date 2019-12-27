@@ -11,11 +11,6 @@ import java.util.List;
 @Repository
 public interface ClasseMatiereDao extends JpaRepository<ClasseMatiere, ClasseMatiereIdentity> {
 
-
-////    @Query(value = "SELECT u FROM ClasseMatiere u where u.classe = ?1 ")
     @Query(value = "SELECT * FROM CLASSE_MATIERE WHERE CLASSE_ID = ?1", nativeQuery = true)
     List<ClasseMatiere> findByClasse(long classeid);
-
-//    List<ClasseMatiere> findAllByClasse_IdMatiereIdentityClasse( Long id);
-
 }

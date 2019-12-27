@@ -17,11 +17,20 @@ import javax.sql.DataSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final String[] PUBLIC_ENDPOINT = {
             "/login**",
-            "/h2-console/**"
+            "/h2-console/**",
+            "/login", "/logout",
+
     };
+    private final String[] ANY_USER_ENDPOINT = {
+            "/userInfo"
 
-
-
+    };
+    private final String[] ADMIN_ENDPOINT = {
+            "/admin","/etudiants","/classes","/matieres",
+            "/abscences","/classe/**","/etudiantNew","/addetudiant","/etudiant/**","/matiereNew",
+            "/addmatiere","/matiere/**","/sms","/sendsms/**","/sendsms/",
+            "/sms","/sendmail/**","/sendmail/","/updateEtudiant",
+    };
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
@@ -54,23 +63,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .authorizeRequests().antMatchers(PUBLIC_ENDPOINT).permitAll().anyRequest().authenticated()
 //                .and()
 //                .httpBasic();
-
-
-
-
-        http.headers().frameOptions().disable();/*to make h2 console appears*/
-
+        http.headers().frameOptions().disable();/*to make h2 console multiple frame appears*/
         http.csrf().disable();
 
-        // The pages does not require login
-        http.authorizeRequests().antMatchers("/", "/login", "/logout", "/etudiants","/classes","/matieres").permitAll();
+        // The pages that does not require login
+        http.authorizeRequests().antMatchers(PUBLIC_ENDPOINT).permitAll();
 
-        // /userInfo page requires login as ROLE_USER or ROLE_ADMIN.
+        // userInfo page requires login as ROLE_USER or ROLE_ADMIN.
         // If no login, it will redirect to /login page.
-        http.authorizeRequests().antMatchers("/userInfo").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers(ANY_USER_ENDPOINT).access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
 
         // For ADMIN only.
-        http.authorizeRequests().antMatchers("/admin").access("hasRole('ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers(ADMIN_ENDPOINT).access("hasRole('ROLE_ADMIN')");
 
         // When the user has logged in as XX.
         // But access a page that requires role YY,
@@ -78,11 +82,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
 
         // Config for Login Form
-        http.authorizeRequests().and().formLogin()//
+        http.authorizeRequests().and().formLogin()
                 // Submit URL of login page.
                 .loginProcessingUrl("/j_spring_security_check") // Submit URL
                 .loginPage("/login")//
-                .defaultSuccessUrl("/userInfo")//
+                .defaultSuccessUrl("/etudiants")//
                 .failureUrl("/login?error=true")//
                 .usernameParameter("username")//
                 .passwordParameter("password")

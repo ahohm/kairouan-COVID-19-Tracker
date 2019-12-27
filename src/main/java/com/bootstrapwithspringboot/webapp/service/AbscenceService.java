@@ -1,6 +1,5 @@
 package com.bootstrapwithspringboot.webapp.service;
 
-
 import com.bootstrapwithspringboot.webapp.dao.AbscenceDao;
 import com.bootstrapwithspringboot.webapp.model.Abscence;
 import com.bootstrapwithspringboot.webapp.model.Etudiant;
@@ -16,7 +15,6 @@ import java.util.Optional;
 public class AbscenceService {
 
     private AbscenceDao abscenceDao;
-
 
     public Abscence save(Abscence abscence){
         return abscenceDao.save(abscence);
@@ -42,7 +40,5 @@ public class AbscenceService {
     public List<Abscence> findAllByMatiereAndEtudiant(Matiere matiere, Etudiant etudiant){
         return abscenceDao.findAllByMatiereAndEtudiant(matiere, etudiant);
     }
-
-
 
 }

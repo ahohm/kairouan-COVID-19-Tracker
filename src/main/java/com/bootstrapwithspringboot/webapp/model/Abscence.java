@@ -29,4 +29,5 @@ public class Abscence {
 
     private LocalDate date;
 
+
 }

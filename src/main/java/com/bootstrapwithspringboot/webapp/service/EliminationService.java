@@ -23,7 +23,7 @@ public class EliminationService {
     }
 
     public Elimination getOneById(EliminationIdentity id){
-        return eliminationDao.getOne(id);
+        return eliminationDao.findByEliminationIdentityEquals(id);
     }
 
     public Elimination update(Elimination classeMatiere){
@@ -41,8 +41,6 @@ public class EliminationService {
     }
 
     public List<Elimination> findAllByEtudiant(String etudiantid){
-//        return classeMatiereDao.findAllByClasseMatiereIdentityClasseIsLike(classe);
-//        return classeMatiereDao.findAllByClasse_IdMatiereIdentityClasse((long) 1);
         return eliminationDao.findByEtudiant(etudiantid);
     }
 }

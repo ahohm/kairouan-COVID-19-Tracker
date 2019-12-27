@@ -16,7 +16,6 @@ public class ClasseCtrl {
 
     private ClasseService classeService;
 
-
     @PostMapping("/add")
     public ResponseEntity<Classe> add(@RequestBody Classe classe){
         try{

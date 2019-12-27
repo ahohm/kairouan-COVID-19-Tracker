@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico"/>
+
+    <title>Navbar Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"
+          th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}">
+
+    <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+
+    <script>
+        $(document).ready(function() {
+            $("#target").click(function(){
+                $("#target2").val($("#target1").val());
+            });
+        });
+    </script>
+
+</head>
+<body>
+<div class="container">
+
+    <th:block th:include="/navbar"></th:block>
+
+    <!-- Main component for a primary marketing message or call to action -->
+    <div class="container-fluid">
+        <!--Usage of models we wrote in WepAppController th:text="'Welcome to basic Bootstrap with Spring Boot created by ' + ${username} -->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="list-group" id="list-tab" role="tablist">
+                    <a class="list-group-item list-group-item-action"  th:href="@{/etudiants}">Etudian</a>
+                    <a class="list-group-item list-group-item-action" th:href="@{/classes}">Classe</a>
+                    <a class="list-group-item list-group-item-action" th:href="@{/matieres}">Matiere</a>
+                    <a class="list-group-item list-group-item-action" th:href="@{/abscences}">Abscence</a>
+                    <a class="list-group-item list-group-item-action" th:href="@{/sms}">Envoyer SMS</a>
+                    <a class="list-group-item list-group-item-action active" th:href="@{/email}">Envoyer mail</a>
+                </div>
+            </div>
+            <div class="col-md-9 container-fluid">
+                <div class="panel-body">
+
+                    <div><a th:href="@{/etudiantNew}" th:if="${etudiant == null}">Choisir un Etuddiant</a></div>
+                    <div class="table-responsive" th:if="${not #lists.isEmpty(etudiants)}">
+                        <table class="table table-hover ">
+                            <thead class="thead-inverse">
+                            <tr class="active">
+                                <th>Matricule</th>
+                                <th>Nom</th>
+                                <th>Prenom</th>
+                                <th>--</th>
+                            </tr>
+                            </thead>
+                            <tr th:each="etudiant : ${etudiants}">
+                                <td th:text="${etudiant.matricule}"></td>
+                                <td th:text="${etudiant.nom}"></td>
+                                <td th:text="${etudiant.prenom}"></td>
+
+                                <td><a href="#" th:href="@{'/sendmail/' + ${etudiant.matricule}}">ecrire text</a></td>
+
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div th:if="${etudiant != null}">
+
+                    <form th:action="@{/sendmail}" th:object="${mailDTO}" method="post">
+                        <div class="col-md-6">
+                            <div>
+                                <h3>SMS pour <span th:text="${etudiant.prenom}+' '+${etudiant.nom}"></span></h3>
+                            </div>
+                            <div>
+                                <input type="text" id="target1" class="form-control is-valid" th:value="${etudiant.email}" disabled/>
+                                <input type="text" id="target2" th:field="*{mail}" hidden />
+                            </div>
+                            <div>
+                                <input type="text"  class="form-control is-valid" placeholder="Subjct"/>
+                            </div>
+                            <div>
+                                <textarea class="form-control" th:field="*{message}"placeholder="ecriver votre sms ici"></textarea>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary" type="button" id="target">Validate</button>
+                                <button class="btn btn-primary" type="submit">Submit form</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>
+
+

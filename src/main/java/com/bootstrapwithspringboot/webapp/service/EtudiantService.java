@@ -6,6 +6,7 @@ import com.bootstrapwithspringboot.webapp.model.Classe;
 import com.bootstrapwithspringboot.webapp.model.Etudiant;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

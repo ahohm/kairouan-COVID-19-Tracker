@@ -72,9 +72,6 @@ public class AbscenceCtrl {
         }
     }
 
-
-
-
     @DeleteMapping("{id}")
     public ResponseEntity<Void> delete(@PathVariable long id){
         try{

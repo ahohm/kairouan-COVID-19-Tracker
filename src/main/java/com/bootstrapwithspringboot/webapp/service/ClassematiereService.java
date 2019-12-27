@@ -1,14 +1,12 @@
 package com.bootstrapwithspringboot.webapp.service;
 
 import com.bootstrapwithspringboot.webapp.dao.ClasseMatiereDao;
-import com.bootstrapwithspringboot.webapp.model.Classe;
 import com.bootstrapwithspringboot.webapp.model.ClasseMatiere;
 import com.bootstrapwithspringboot.webapp.model.ClasseMatiereIdentity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 
 @Service
 @AllArgsConstructor
@@ -43,7 +41,6 @@ public class ClassematiereService {
     }
 
     public List<ClasseMatiere> findAllByClasse(long classeid){
-//        return classeMatiereDao.findAllByClasseMatiereIdentityClasseIsLike(classe);
         return classeMatiereDao.findByClasse(classeid);
     }
 }

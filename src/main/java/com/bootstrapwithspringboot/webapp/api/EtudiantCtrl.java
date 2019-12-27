@@ -13,6 +13,7 @@ import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Properties;
 
 @RestController
 @RequestMapping("/etudiant")
@@ -22,12 +23,10 @@ public class EtudiantCtrl {
     private EtudiantService etudiantService;
     private ClasseDao classeDao;
 
-
-
     @PostMapping("/add")
     public ResponseEntity<Etudiant> add(@Valid @RequestBody Etudiant etudiant,
                                         @Valid @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dob,
-                                        @PathParam("classeid") long classeid){
+                                        @PathParam("classeid") long classeid) {
             try{
 
                 etudiant.setDateDeNaissance(dob);

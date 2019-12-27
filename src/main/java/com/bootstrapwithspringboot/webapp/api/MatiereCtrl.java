@@ -60,8 +60,6 @@ public class MatiereCtrl {
         }
     }
 
-
-
     @DeleteMapping("{id}")
     public ResponseEntity<Void> delete(@PathVariable long id){
         try{
@@ -73,22 +71,14 @@ public class MatiereCtrl {
         }
     }
 
-//    @GetMapping("/byclasse/{id}")
-//    public ResponseEntity<List<Matiere>> getAllByMatiere(@PathVariable long id){
-//        try {
-//            Classe classe = classeService.getOne(id);
-//            return new ResponseEntity(matiereService.findByClasse(classe),HttpStatus.OK);
-//        }
-//        catch (Exception e){
-//            return new ResponseEntity(HttpStatus.NO_CONTENT);
-//        }
-//    }
-
     @GetMapping("/byclasse/{id}")
-    public List<Matiere> getAllByMatiere(@PathVariable long id){
-//            Classe classe = classeService.getOneById(id).get();
-            return matiereService.findByClasse(id);
-
+    public ResponseEntity<List<Matiere>> getAllByMatiere(@PathVariable long id){
+        try {
+            return new ResponseEntity(matiereService.findByClasse(id),HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
     }
 }
 
