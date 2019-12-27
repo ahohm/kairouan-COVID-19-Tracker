@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface EliminationDao extends JpaRepository<Elimination, EliminationIdentity> {
 
-    @Query(value = "SELECT * FROM ELIMINATION WHERE  ETUDIANT_MATRICULE = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM  elimination WHERE   etudiant_matricule = ?1", nativeQuery = true)
     List<Elimination> findByEtudiant(String matricule);
 
     Elimination findByEliminationIdentityEquals(EliminationIdentity eliminationIdentity);

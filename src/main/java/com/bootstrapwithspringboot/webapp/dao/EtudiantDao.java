@@ -12,7 +12,7 @@ import java.util.List;
 public interface EtudiantDao extends JpaRepository<Etudiant, String> {
     Etudiant findByMatricule(String matricule);
 
-    @Query(value = "select max(matricule) from Etudiant ")
+    @Query(value = "select max(matricule) from etudiant " , nativeQuery = true)
     String getMaxMatricule();
 
     List<Etudiant> findAllByClasse(Classe classe);
