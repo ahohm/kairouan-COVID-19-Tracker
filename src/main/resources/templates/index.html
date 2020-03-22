@@ -14,7 +14,7 @@
     <!-- Bootstrap core CSS -->
     <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
 </head>
-<body>
+<body dir="rtl">
 <div class="container">
     <!-- Static navbar -->
     <nav class="navbar navbar-default">
@@ -25,9 +25,9 @@
     <!-- Main component for a primary marketing message or call to action -->
     <div class="jumbotron">
         <!--Usage of models we wrote in WepAppController th:text="'Welcome to basic Bootstrap with Spring Boot created by ' + ${username} -->
-        <h3 th:text="'Welcome to basic Thymeleaf with Spring Boot Abscences management System created by ' + ${username}"></h3>
-        <p th:text="'This date example  ' + ${#dates.format(datetime, 'dd MMM yyyy HH:mm')}"></p>
-        <p> it's a small exercise to work with Spring boot, Thymeleaf, jQuery, Bootstrap etc...</p>
+        <h3 th:text="WOLCOME "></h3>
+        <p th:text="'TO DAY IS  ' + ${#dates.format(datetime, 'dd MMM yyyy HH:mm')}"></p>
+        <p> COVID-19 SUSPECT TRACKER</p>
         <p>
             <a class="btn btn-lg btn-primary" th:href="@{/login}" role="button">Get started &raquo;</a>
         </p>

@@ -46,67 +46,64 @@
 
 </head>
 <body>
-<div class="container">
+<div class="container" dir="rtl">
 
     <th:block th:include="/navbar"></th:block>
 
     <!-- Main component for a primary marketing message or call to action -->
     <div class="container-fluid">
         <!--Usage of models we wrote in WepAppController th:text="'Welcome to basic Bootstrap with Spring Boot created by ' + ${username} -->
-        <div class="row">
+        <div class="row" >
             <div class="col-md-3">
                 <div class="list-group" id="list-tab" role="tablist">
-                    <a class="list-group-item list-group-item-action" th:href="@{/etudiants}">Etudian</a>
-                    <a class="list-group-item list-group-item-action" th:href="@{/classes}">Classe</a>
-                    <a class="list-group-item list-group-item-action active" th:href="@{/matieres}">Matiere</a>
-                    <a class="list-group-item list-group-item-action" th:href="@{/abscences}">Abscence</a>
-                    <a class="list-group-item list-group-item-action" th:href="@{/sms}">Envoyer SMS</a>
-                    <a class="list-group-item list-group-item-action" th:href="@{/email}">Envoyer mail</a>
+
+
+
+                    <a class="list-group-item list-group-item-action active"  th:href="@{/suspects}">في الحجر</a>
+                    <a class="list-group-item list-group-item-action" th:href="@{/quarentineFinish}">حجر منتهي</a>
+                    <a class="list-group-item list-group-item-action" th:href="@{/desciplines}">غير ملتزم</a>
+                    <a class="list-group-item list-group-item-action" th:href="@{/infected}">مصاب</a>
+                    <a class="list-group-item list-group-item-action" th:href="@{/fine}">معافى</a>
                 </div>
             </div>
             <div class="col-md-9 container-fluid">
                 <div class="panel-body">
-                    <div><a th:href="@{/matiereNew}">Ajouter Matiere</a></div>
-                    <div class="table-responsive" th:if="${not #lists.isEmpty(matieres)}">
-                        <table class="table table-hover ">
+
+
+                    <div><a th:href="@{/suspectNew}">إضافة</a></div>
+                    <div class="table-responsive" th:if="${not #lists.isEmpty(suspects)}">
+                        <table class="table table-hover " dir="rtl">
                             <thead class="thead-inverse">
                             <tr class="active">
-                                <th>Id</th>
-                                <th>Libel</th>
-                                <th>n°Hours</th>
-                                <th>n°Permit</th>
-                                <th>--</th>
-                                <th>Update</th>
-                                <th>Delete</th>
+                                <th>الإسم و اللقب</th>
+                                <th>بلد القدوم</th>
+                                <th>الجهة </th>
+                                <th>الهاتف</th>
+                                <th>تاريخ بداية الحجر</th>
+                                <th>تاريخ نهاية الحجر</th>
+                                <th>ملتزم </th>
                             </tr>
                             </thead>
-                            <tr th:remove="all">
-                                <td>123</td>
-                                <td>Tasty Goodnees 1</td>
-                                <td>Tasty Goodnees 1</td>
-                                <td>Tasty Goodnees 1</td>
-                                <td><a href="#">View</a></td>
-                            </tr>
-                            <tr th:remove="all">
-                                <td>12333</td>
-                                <td>12333</td>
-                                <td>12333</td>
-                                <td>Tasty Goodnees 2</td>
-                                <td><a href="#">View</a></td>
-                            </tr>
-                            <tr th:each="matiere : ${matieres}">
-                                <td th:text="${matiere.id}">334</td>
-                                <td th:text="${matiere.libel}">Tasty Goodnees 3</td>
-                                <td th:text="${matiere.numberHours}">Tasty Goodnees 3</td>
-                                <td th:text="${matiere.permit}">Tasty Goodnees 3</td>
-                                <td><a href="#" th:href="@{'/etudiant/' + ${matiere.id} + '/show'}">View</a></td>
-                                <td><a href="#" th:href="@{'/etudiant/' + ${matiere.id} + '/update'}">Update</a></td>
-                                <td><a href="#" th:href="@{'/matiere/' + ${matiere.id} + '/delete'}">Delete</a></td>
+                            <tr th:each="suspect : ${suspects}">
+                                <td th:text="${suspect.firstName+' '+suspect.lastName}"></td>
+                                <td th:text="${suspect.country}"></td>
+                                <td th:text="${suspect.city}"></td>
+                                <td th:text="${suspect.phonenumber}"></td>
+                                <td th:text="${suspect.dateIn}"></td>
+                                <td th:text="${suspect.dateOut}"></td>
+                                <td th:text="${suspect.descipline}"></td>
+
+                                <td>
+                                    <a href="#" th:href="@{'/addNestedsuspect/' + ${suspect.id}}"> إمكانية عدوى</a>
+                                    <a href="#" th:href="@{'/suspect/' + ${suspect.id} + '/update'}">تحديث</a>
+                                    <a href="#" th:href="@{'/suspect/' + ${suspect.id} + '/delete'}">حذف</a>
+                                </td>
                             </tr>
                         </table>
                     </div>
                 </div>
-           </div>
+
+            </div>
         </div>
     </div>
 </div> <!-- /container -->
