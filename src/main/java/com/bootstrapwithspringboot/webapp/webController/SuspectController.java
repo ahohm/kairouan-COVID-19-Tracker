@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.FileNotFoundException;
 import java.util.Date;
@@ -142,13 +139,23 @@ public class SuspectController {
     }
 
 
-
     @GetMapping("/printAll")
     public String printAll(Model model) throws FileNotFoundException, JRException {
         model.addAttribute("datetime", new Date());
         model.addAttribute("username", "admin1");
         model.addAttribute("mode", appMode);
-        reportService.exportReport();
+        String city ="";
+        reportService.exportReport(city);
+        model.addAttribute("suspects", suspectService.findAll());
+
+        return "suspect";
+    }
+    @GetMapping("/printAll/{city}")
+    public String printAllcity(Model model, @PathVariable String city) throws FileNotFoundException, JRException {
+        model.addAttribute("datetime", new Date());
+        model.addAttribute("username", "admin1");
+        model.addAttribute("mode", appMode);
+        reportService.exportReport(city);
         model.addAttribute("suspects", suspectService.findAll());
 
         return "suspect";
