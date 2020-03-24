@@ -1,7 +1,11 @@
 package com.bootstrapwithspringboot.webapp.webController;
 
+import com.bootstrapwithspringboot.webapp.dao.SuspectDao;
 import com.bootstrapwithspringboot.webapp.dto.SuspectDto;
+import com.bootstrapwithspringboot.webapp.dto.SuspectDtoNested;
+import com.bootstrapwithspringboot.webapp.service.ReportService;
 import com.bootstrapwithspringboot.webapp.service.SuspectService;
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.io.FileNotFoundException;
 import java.util.Date;
 
 @Controller
@@ -20,6 +25,13 @@ public class SuspectController {
 
     @Autowired
     private SuspectService suspectService;
+
+    @Autowired
+    private ReportService reportService;
+
+    @Autowired
+    private SuspectDao suspectDao;
+    ;
     @Autowired
     public SuspectController(Environment environment){
         appMode = environment.getProperty("app-mode");
@@ -84,6 +96,7 @@ public class SuspectController {
     @PostMapping("/addsuspect")
     public String addOneEtudiant(Model model, SuspectDto suspectDto){
         try {
+
             suspectService.save(suspectDto);
             model.addAttribute("done", true);
             model.addAttribute("suspect", new SuspectDto());
@@ -103,49 +116,42 @@ public class SuspectController {
         return "suspectNew1";
     }
 
-
-//    public String addOneSuspect(Model model, @PathVariable long id ,SuspectDto suspectDto){
-//        try {
-//            suspectService.save(suspectDto);
-//            model.addAttribute("done", true);
-//            model.addAttribute("suspect", new SuspectDto());
-//        }catch (Exception e){
-//            model.addAttribute("done", false);
-//            model.addAttribute("suspect", suspectDto);
-//        }
-//        model.addAttribute("suspect", new SuspectDto());
-//        return "suspectNew1";
-//    }
-
-
-//    @GetMapping("/suspect/{id}")
-//    public String maybesuspct(@PathVariable long id, Model model){
-//        model.addAttribute("suspectparent", suspectService.getOneById(id));
-//        model.addAttribute("suspect", new SuspectDto());
-//        return "suspectNew1";
-//    }
-    /*
-    @GetMapping("etudiant/{id}/update")
-    public String updateEtudiant(@PathVariable long id, Model model){
-
-
-        model.addAttribute("suspect", suspectService.getOneById(id));
-        return "etudiantUpdate";
-    }
-
-    @PostMapping("/updateEtudiant")
-    public String saveupdate(Model model, SuspectDto suspectDto){
-        suspectService.save(suspectDto);
+    @GetMapping("/suspect/{id}/nondesciplin")
+    public String displined(Model model, @PathVariable long id ){
+        suspectService.setDesciplin(id);
         model.addAttribute("suspects", suspectService.findAll());
-        return "etudiant";
+        return "suspect";
+    }
+    @GetMapping("/addNestedsuspect/{id}")
+    public String nestedSuspect(Model model, @PathVariable long id ){
+        SuspectDto dtoNested = new SuspectDto();
+        dtoNested.setParentSuspect(id);
+        model.addAttribute("suspect", dtoNested);
+        return "suspectNew";
     }
 
-    @GetMapping("etudiant/{id}/delete")
-    public String deleteEtudiant(@PathVariable long id, Model model){
+    @RequestMapping("/city/{city}")
+    public String sbikha(Model model, @PathVariable String city){
+        model.addAttribute("datetime", new Date());
+        model.addAttribute("username", "admin1");
+        model.addAttribute("mode", appMode);
 
-        suspectService.delete(id);
+        model.addAttribute("suspects", suspectService.findByCity(city));
+
+        return "suspect";
+    }
+
+
+
+    @GetMapping("/printAll")
+    public String printAll(Model model) throws FileNotFoundException, JRException {
+        model.addAttribute("datetime", new Date());
+        model.addAttribute("username", "admin1");
+        model.addAttribute("mode", appMode);
+        reportService.exportReport();
         model.addAttribute("suspects", suspectService.findAll());
-        return "etudiant";
+
+        return "suspect";
     }
-*/
+
 }

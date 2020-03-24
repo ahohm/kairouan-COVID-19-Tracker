@@ -58,11 +58,22 @@
                 <div class="list-group" id="list-tab" role="tablist">
 
 
-                    <a class="list-group-item list-group-item-action active"  th:href="@{/suspects}">في الحجر</a>
-                    <a class="list-group-item list-group-item-action" th:href="@{/quarentineFinish}">حجر منتهي</a>
-                    <a class="list-group-item list-group-item-action" th:href="@{/desciplines}">غير ملتزم</a>
-                    <a class="list-group-item list-group-item-action" th:href="@{/infected}">مصاب</a>
-                    <a class="list-group-item list-group-item-action" th:href="@{/fine}">معافى</a>
+                    <a class="list-group-item list-group-item-action "  th:href="@{/suspects}">في الحجر</a>
+                    <a class="list-group-item list-group-item-action bg-success" th:href="@{/quarentineFinish}">حجر منتهي</a>
+                    <a class="list-group-item list-group-item-action bg-danger" th:href="@{/desciplines}">غير ملتزم</a>
+
+                    <a class="list-group-item list-group-item-action active" th:href="@{/city/السبيخة}">السبيخة</a>
+                    <a class="list-group-item list-group-item-action active" th:href="@{/city/الشبيكة}">الشبيكة</a>
+                    <a class="list-group-item list-group-item-action active" th:href="@{/city/الشراردة}">الشراردة</a>
+                    <a class="list-group-item list-group-item-action active" th:href="@{/city/العلا}">العلا</a>
+                    <a class="list-group-item list-group-item-action active" th:href="@{/city/القيروان%20الجنوبية}">القيروان الجنوبية</a>
+                    <a class="list-group-item list-group-item-action active" th:href="@{/city/القيروان%20الشمالية}">القيروان الشمالية</a>
+                    <a class="list-group-item list-group-item-action active" th:href="@{/city/الوسلاتية}">الوسلاتية</a>
+                    <a class="list-group-item list-group-item-action active" th:href="@{/city/بوحجلة}">بوحجلة</a>
+                    <a class="list-group-item list-group-item-action active" th:href="@{/city/الحاجب}">الحاجب</a>
+                    <a class="list-group-item list-group-item-action active" th:href="@{/city/حفوز}">حفوز</a>
+                    <a class="list-group-item list-group-item-action active" th:href="@{/city/نصر%20الله}">نصر الله</a>
+
                 </div>
             </div>
             <div class="col-md-9 container-fluid">
@@ -70,6 +81,7 @@
                 <div class="col-md-6">
                     <form th:action="@{/addsuspect}" th:object="${suspect}" method="post">
                         <table >
+                            <input th:field="*{parentSuspect}" type="hidden" class="form-control " id="validationServer44"  >
 
                             <tr>
                                 <label for="validationServer01">الإسم</label>
@@ -84,7 +96,7 @@
                             <tr>
                                 <label for="validationServerUsername">بلد القدوم</label>
 
-                                    <input th:field="*{country}" type="text" class="form-control " id="validationServerUsername" placeholder="بلد القدوم" aria-describedby="inputGroupPrepend3" required>
+                                    <input th:field="*{country}" type="text" class="form-control " id="validationServerUsername" placeholder="بلد القدوم" aria-describedby="inputGroupPrepend3" th:default="xxx">
 
                             </tr>
                             <!--<tr>
@@ -93,7 +105,7 @@
 
                             </tr>-->
                             <tr>
-                                <label for="validationServer03">2الجهة</label>
+                                <label for="validationServer03">الجهة</label>
                                 <select th:field="*{city}" class="form-control" id="validationServer03">
                                     <option value="السبيخة">السبيخة</option>
                                     <option value="الشبيكة">الشبيكة</option>
@@ -113,7 +125,7 @@
 
                             <tr>
                                 <label for="validationServer04">الهاتف</label>
-                                <input th:field="${suspect.phonenumber}" type="text" class="form-control " id="validationServer04" placeholder="الهاتف" required>
+                                <input th:field="${suspect.phonenumber}" type="text" class="form-control " id="validationServer04" placeholder="الهاتف" >
                             </tr>
                             <tr>
                                 <label for="validationServer05">تاريخ بداية الحجر</label>
@@ -121,7 +133,7 @@
 
                             </tr>
                             <tr>
-                                <button class="btn btn-primary" type="submit">Submit form</button>
+                                <button class="btn btn-primary" type="submit">حفض</button>
                             </tr>
                         </table>
 

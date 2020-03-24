@@ -23,6 +23,7 @@ public class SuspectService {
     public Suspect save(SuspectDto suspect){
         Suspect suspect1 = new Suspect();
 
+
         suspect1.setFirstName(suspect.getFirstName());
         suspect1.setLastName(suspect.getLastName());
         suspect1.setCountry(suspect.getCountry());
@@ -32,7 +33,7 @@ public class SuspectService {
         suspect1.setDateOut(LocalDate.from(DateTimeFormatter.ISO_LOCAL_DATE.parse(suspect.getDateIn())).plusDays(14));
 
         if (suspect.getParentSuspect()!=0) {
-                suspect1.setParentSuspect(getOneById(suspect.getParentSuspect()).get());
+                suspect1.setParentSuspect(suspectDao.getOne(suspect.getParentSuspect()));
         }
 
         return suspectDao.save(suspect1);
@@ -100,5 +101,11 @@ public class SuspectService {
         return suspectDao.findByFirstNameAndLastNameEquals(name,lname);
     }
 
+
+    public void setDesciplin(long id){
+        Suspect s = suspectDao.getOne(id);
+        s.setDescipline(!s.isDescipline());
+        suspectDao.save(s);
+    }
 
 }

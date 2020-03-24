@@ -5,7 +5,7 @@ insert into suspect  ( id , first_name ,last_name ,country , city ,date_in ,date
 values ( 2 , 'محمد أمين ','العياري','فرنسا' , 'الشراردة','2020-03-15','2020-03-29','99119665', null,false, false);
 
 insert into suspect  ( id , first_name ,last_name ,country , city ,date_in ,date_out ,phonenumber , parent_suspect_id ,descipline , is_infected )
-values ( 3 , 'محمد  ','أمين','إطاليا' , 'العلا','2020-03-15','2020-03-29','97119665', 1,false, false);
+values ( 3 , 'محمد  ','أمين','إطاليا' , 'القيروان الجنوبية','2020-03-15','2020-03-29','97119665', 1,false, false);
 
 -- Used by Spring Remember Me API. h2
 CREATE TABLE Persistent_Logins (

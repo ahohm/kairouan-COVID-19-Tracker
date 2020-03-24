@@ -26,10 +26,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     };
     private final String[] ADMIN_ENDPOINT = {
-            "/admin","/etudiants","/classes","/matieres",
-            "/abscences","/classe/**","/etudiantNew","/addetudiant","/etudiant/**","/matiereNew",
-            "/addmatiere","/matiere/**","/sms","/sendsms/**","/sendsms/",
-            "/sms","/sendmail/**","/sendmail/","/updateEtudiant",
+            "/admin",
+            "/suspect**",
+            "/city/**",
+            "/add**",
+            "/descip**",
+            "/qua**"
     };
 
     @Autowired
